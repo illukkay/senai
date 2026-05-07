@@ -12,12 +12,15 @@ import io.jsonwebtoken.security.Keys;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Aluno
  */
+@Service
 public class TokenService {
+    
     @Value("${api.security.token.secret}")
     private String secret;
     
@@ -29,9 +32,9 @@ public class TokenService {
     }
     
     
-    public String gerarToken() {
+    public String gerarToken(String email) {
         return Jwts.builder()
-                .subject("iago.teste@teste.com")
+                .subject(email)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 300000))
                 .signWith(getSignKey())

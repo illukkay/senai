@@ -4,22 +4,25 @@
  */
 package com.projeto.senai.repository;
 
+import com.projeto.senai.model.AuthBean;
 import com.projeto.senai.model.UsuarioBean;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Aluno
  */
+@Repository
 public class UsuarioDAO {
     
     
     public void registrar(UsuarioBean usuario) {
         try {
             Connection conn = Conexao.conectar();
-            String sql = "INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             
             stmt.setString(1, usuario.getNome());
@@ -33,24 +36,20 @@ public class UsuarioDAO {
     }
 
     
-    public UsuarioBean logar(String email, String senha) {
-        UsuarioBean usuario = null;
+    public AuthBean logar(String email, String senha) {
+        AuthBean usuario = new AuthBean();
         try {
             Connection conn = Conexao.conectar();
-            String sql = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
+            String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             
             stmt.setString(1, email);
             stmt.setString(2, senha);
-            
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                usuario = new UsuarioBean();
-                usuario.setId(rs.getInt("id"));
                 usuario.setNome(rs.getString("nome"));
                 usuario.setEmail(rs.getString("email"));
-                usuario.setSenha(rs.getString("senha"));
             }
         } catch (Exception e) {
             e.printStackTrace();
