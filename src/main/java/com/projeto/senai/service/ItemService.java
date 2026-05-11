@@ -12,7 +12,7 @@ public class ItemService {
     @Autowired
     private ItemDAO repository;
 
-    public List<ItemBean> listarPorLocal(int idLocal) {
+    public List<ItemBean> listarPorLocal (int idLocal) {
         return repository.lerItensPorLocal(idLocal);
     }
 

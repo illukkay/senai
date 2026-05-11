@@ -5,13 +5,19 @@
 package com.projeto.senai.controller;
 
 import com.projeto.senai.model.AuthBean;
+import com.projeto.senai.model.IdUsuarioBean;
 import com.projeto.senai.model.UsuarioBean;
+import com.projeto.senai.repository.UsuarioDAO;
 import com.projeto.senai.service.TokenService;
 import com.projeto.senai.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,8 +36,9 @@ public class UsuarioController {
     private TokenService token;
              
     @PostMapping("/cadastrar")
-    public void Cadastrar(@RequestBody UsuarioBean usuario) {
+    public String Cadastrar(@RequestBody AuthBean usuario) {
         service.registrar(usuario);
+        return "Cadastrado com sucesso!" ;
     }
     
     
@@ -43,8 +50,35 @@ public class UsuarioController {
         }else{
             return "invalido";
         }
+     }
+     
+     
+    @PutMapping("/modificar/{id}")
+    public String update(@PathVariable int id, @RequestBody UsuarioBean update, @RequestHeader("Authorization") String auth){
+        System.out.println(auth);
+        String tokens = auth.replace("Bearer ", "");
+        if(token.validarToken(tokens)){
+            update.setId(id);
+            service.update(update);
+            return "usuario atualizado com sucesso";
+        }else{
+            return null;
+        }
+        
+        
+        
+   }
     
-
-    
+    @DeleteMapping("/deletar/{id}")
+    public String DeletarUsuario(@PathVariable int id, @RequestBody IdUsuarioBean update, @RequestHeader("Authorization") String auth){
+        System.out.println(auth);
+        String tokens = auth.replace("Bearer ", "");
+        if(token.validarToken(tokens)){
+            update.setId_usuario(id);
+            service.DeletarUsuario(update);
+            return "usuario d com sucesso";
+        }else{
+            return null;
+        }
 }
 }

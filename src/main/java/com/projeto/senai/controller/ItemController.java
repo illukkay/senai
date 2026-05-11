@@ -6,6 +6,7 @@ package com.projeto.senai.controller;
 
 import com.projeto.senai.model.ItemBean;
 import com.projeto.senai.service.ItemService;
+import com.projeto.senai.service.TokenService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,11 +28,18 @@ public class ItemController {
 
     @Autowired
     private ItemService service;
+    
+    @Autowired 
+    private TokenService stoken;
 
-    @GetMapping("/local/{id}")
-    public List<ItemBean> listarPorLocal(@PathVariable int id) {
+    @GetMapping("/local/{id}") 
+    public List<ItemBean> listarPorLocal(@PathVariable int id, @RequestHeader ("Authorization") String auth) {
+        String token = auth.replace("Bearer ", "");
+        stoken.validarToken(token);               
         return service.listarPorLocal(id);
-    }
+        }
+      
+        
 
     @PostMapping
     public void criar(@RequestBody ItemBean item) {

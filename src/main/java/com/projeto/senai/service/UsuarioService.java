@@ -5,6 +5,7 @@
 package com.projeto.senai.service;
 
 import com.projeto.senai.model.AuthBean;
+import com.projeto.senai.model.IdUsuarioBean;
 import com.projeto.senai.model.UsuarioBean;
 import com.projeto.senai.repository.UsuarioDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,19 @@ public class UsuarioService {
     @Autowired
     private UsuarioDAO repository;
     
-     public void registrar(UsuarioBean usuario){
+     public void registrar(AuthBean usuario){
          repository.registrar(usuario);
      }
      
      public AuthBean logar(String email, String senha){
          return repository.logar(email, senha);
-     }   
+     }  
+     
+     public void update(UsuarioBean update){
+         repository.update(update);
+     }
+     
+     public void DeletarUsuario(IdUsuarioBean update){
+         repository.DeletarUsuario(update);
+     }
 }
